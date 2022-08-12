@@ -1,15 +1,22 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
+
+from decimal import Decimal
+
 from bs4 import BeautifulSoup
 
+import re
 class LegoScraper():
     """Lego webstore scrapper"""
 
     def __init__(self):
-        options = webdriver.ChromeOptions()
-        options.add_argument(" - incognito")
-        options.add_argument("--headless")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--no-sandbox")
+        self.options = webdriver.ChromeOptions()
+        self.options.add_argument(" - incognito")
+        self.options.add_argument("--headless")
+        self.options.add_argument("--disable-dev-shm-usage")
+        self.options.add_argument("--no-sandbox")
 
         self.path = "/usr/local/bin/chromedriver"
 
@@ -22,31 +29,74 @@ class LegoScraper():
 
         return html
 
-    def scrape_themes_urls(self):
-        """Return list of lego themes urls."""
-        html = self.get_html('https://www.lego.com/pl-pl/themes')
+    def get_page_count(self, url):
+        """Retrieve page count from url."""
+        html = self.get_html(url)
         soup = BeautifulSoup(html, 'html.parser')
-        list = [link.get('href') for link in soup.find_all('a', class_="CategoryLeafstyles__ImagesLink-is33yg-4")]
+
+        pages = soup.find_all(
+            'a',
+            class_='Paginationstyles__PageLink-npbsev-7'
+        )
+
+        return len(pages)
+
+    def scrape_themes_urls(self, themes_url):
+        """Return list of lego themes urls."""
+        html = self.get_html(themes_url)
+        soup = BeautifulSoup(html, 'html.parser')
+        list = ['https://www.lego.com' + link.get('href') for link in soup.find_all('a', class_="CategoryLeafstyles__ImagesLink-is33yg-4")]
 
         return list
 
     def scrape_sets_urls_from_theme(self, theme_url):
         """Return list of lego sets urls from theme url."""
-        html = self.get_html(theme_url)
-        soup = BeautifulSoup(html, 'html.parser')
-        list = [link.get('href') for link in soup.find_all('a', attrs={'data-test': "product-leaf-title-link"})]
+        list = []
+        page_count = self.get_page_count(theme_url)
+
+        for page in range(1, page_count+1):
+            html = self.get_html(theme_url + f'?page={page}')
+            soup = BeautifulSoup(html, 'html.parser')
+
+            list = ['https://www.lego.com' + link.get('href') for link in soup.find_all('a', attrs={'data-test': "product-leaf-title-link"})]
 
         return list
+    
+    def _get_product_attribute(self, soup, datatest):
+        """Retrieve and return product attribute."""
+        attr = soup.find('div', attr={'data-test': datatest}).find(class_='Markup__StyledMarkup-ar1l9g-0 gkoBeO').string
+
+        return attr
 
     def scrape_set(self, url):
         """Retrieve lego set fields from url and return dictionary of fields."""
         html = self.get_html(url)
         soup = BeautifulSoup(html, 'html.parser')
-        title, product_id, theme, price, available, age, elements, link, minifigures = soup
-        title = title.find('span', class_="Markup__StyledMarkup-ar1l9g-0 hlipzx").string
-        product_id = product_id.find('span', class_="Markup__StyledMarkup-ar1l9g-0 hlipzx")
-        # to be added
 
-def refresh_db():
-    """Scrape lego webstore from lego sets and add them to database if they don't exist."""
-    pass
+        title = soup.find(attrs={'property': 'og:title'})['content']
+        product_id = soup.find(attrs={'property': 'product:retailer_item_id'})['content']
+        price = soup.find(attrs={'property': 'product:price:amount'})['content']
+        available = soup.find(attrs={'data-test': 'product-overview-availability'}).find(class_='Markup__StyledMarkup-ar1l9g-0 gkoBeO').string
+        age = soup.find(attrs={'data-test': 'ages-value'}).find(class_='Markup__StyledMarkup-ar1l9g-0 gkoBeO').string
+        elements = soup.find(attrs={'data-test': 'pieces-value'}).find(class_='Markup__StyledMarkup-ar1l9g-0 gkoBeO').string
+        try:
+            minifigures = soup.find(attrs={'data-test': 'minifigures-value'}).find(class_='Markup__StyledMarkup-ar1l9g-0 gkoBeO').string
+        except:
+            minifigures = None
+
+        str_list = title.split('|')
+        theme = str_list[1]
+
+        lego_set = {
+            'title': title[:(title.find('®')+1)],
+            'product_id': product_id,
+            'theme': theme[1:len(theme)-1],
+            'price': Decimal(price),
+            'available': available,
+            'age': age,
+            'elements': int(elements),
+            'link': url,
+            'minifigures': minifigures,
+        }
+
+        return lego_set

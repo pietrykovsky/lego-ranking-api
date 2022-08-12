@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from decimal import Decimal
 
-from .models import LegoSet
+from ..models import LegoSet
 
 class ModelTests(TestCase):
     """Tests for legoscraper models."""
@@ -19,7 +19,7 @@ class ModelTests(TestCase):
             'elements': 2354,
             'link': 'https://www.lego.com/pl-pl/product/nasa-space-shuttle-discovery-10283',
         }
-        legoset = LegoSet.objects.create(title=fields['title'], product_id=fields['product_id'], theme=fields['theme'], price=fields['price'], available=fields['available'], age=fields['age'], elements=fields['elements'], link=fields['link'])
+        legoset = LegoSet.objects.create(**fields)
 
         for k, v in fields.items():
             self.assertEqual(getattr(legoset, k), v)
@@ -37,6 +37,6 @@ class ModelTests(TestCase):
             'elements': 2,
             'link': 'https://www.lego.com/pl-pl/product/nasa-space-shuttle-discovery-10283',
         }
-        legoset = LegoSet.objects.create(title=fields['title'], product_id=fields['product_id'], theme=fields['theme'], price=fields['price'], available=fields['available'], age=fields['age'], elements=fields['elements'], link=fields['link'])
+        legoset = LegoSet.objects.create(**fields)
 
         self.assertEqual(legoset.price_per_element, Decimal('166.66'))
