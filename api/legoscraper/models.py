@@ -1,6 +1,6 @@
 from django.db import models
 
-from decimal import Decimal, getcontext
+from decimal import Decimal
 
 class LegoSet(models.Model):
     """Model for lego set objects."""
@@ -9,8 +9,8 @@ class LegoSet(models.Model):
     product_id = models.CharField(max_length=50, unique=True)
     theme = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    available = models.BooleanField(default=False)
-    age = models.CharField(max_length=3)
+    available = models.CharField(max_length=100)
+    age = models.CharField(max_length=5)
     elements = models.IntegerField()
     link = models.TextField()
     minifigures = models.IntegerField(blank=True, null=True)

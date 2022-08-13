@@ -1,13 +1,9 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.ui import WebDriverWait
 
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
 
-import re
 class LegoScraper():
     """Lego webstore scrapper"""
 
@@ -61,12 +57,6 @@ class LegoScraper():
             list = ['https://www.lego.com' + link.get('href') for link in soup.find_all('a', attrs={'data-test': "product-leaf-title-link"})]
 
         return list
-    
-    def _get_product_attribute(self, soup, datatest):
-        """Retrieve and return product attribute."""
-        attr = soup.find('div', attr={'data-test': datatest}).find(class_='Markup__StyledMarkup-ar1l9g-0 gkoBeO').string
-
-        return attr
 
     def scrape_set(self, url):
         """Retrieve lego set fields from url and return dictionary of fields."""
