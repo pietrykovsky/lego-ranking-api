@@ -35,3 +35,12 @@ services:
       - db
       - redis
       - api
+  beat:
+    build: .
+    command: celery -A api beat -l info
+    volumes:
+      - ./api:/api
+    env_file:
+      - .env
+    depends_on:
+      - celery

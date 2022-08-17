@@ -2,7 +2,6 @@ beautifulsoup4==4.11.1
 celery==5.2.7
 Django==4.0.7
 django-celery-beat==2.3.0
-django-rest-framework==0.1.0
 djangorestframework==3.13.1
 drf-spectacular==0.23.1
 psycopg2-binary==2.9.3

@@ -54,7 +54,6 @@ class ScraperTests(TestCase):
         """Test scrape whole lego store from lego sets success."""
         lego_sets = self.scraper.scrape()
         for lego_set in lego_sets:
-            print(lego_set)
             del lego_set['minifigures']
             for k in lego_set:
                 self.assertIsNotNone(lego_set[k])
