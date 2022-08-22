@@ -2,20 +2,36 @@ from django.test import TestCase
 
 from decimal import Decimal
 
-from ..models import LegoSet
+from ..models import LegoSet, Theme, AgeCategory
 
 class ModelTests(TestCase):
     """Tests for legoscraper models."""
 
+    def test_create_theme_success(self):
+        """Test create theme object is successful."""
+        name = 'Classic'
+        theme = Theme.objects.create(name=name)
+
+        self.assertEqual(theme.name, name)
+
+    def test_create_age_category_success(self):
+        """Test create age category object is successful."""
+        name = '18+'
+        age_category = AgeCategory.objects.create(name=name)
+
+        self.assertEqual(age_category.name, name)
+            
     def test_create_legoset_success(self):
         """Test create legoset object."""
+        theme = Theme.objects.create(name='Classic')
+        age_category = AgeCategory.objects.create(name='18+')
         fields = {
             'title': 'test title',
             'product_id': '10283',
-            'theme': 'lego-icons',
+            'theme': theme,
             'price': Decimal('849.99'),
             'available': True,
-            'age': '18+',
+            'age': age_category,
             'elements': 2354,
             'link': 'https://www.lego.com/pl-pl/product/nasa-space-shuttle-discovery-10283',
         }
@@ -27,13 +43,15 @@ class ModelTests(TestCase):
 
     def test_legoset_price_per_element_correct(self):
         """Test price per element property returns a correct value."""
+        theme = Theme.objects.create(name='Classic')
+        age_category = AgeCategory.objects.create(name='18+')
         fields = {
             'title': 'test title',
             'product_id': '10283',
-            'theme': 'lego-icons',
+            'theme': theme,
             'price': Decimal('333.33'),
             'available': True,
-            'age': '18+',
+            'age': age_category,
             'elements': 2,
             'link': 'https://www.lego.com/pl-pl/product/nasa-space-shuttle-discovery-10283',
         }
