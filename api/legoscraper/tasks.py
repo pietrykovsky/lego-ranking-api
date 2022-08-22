@@ -29,13 +29,11 @@ def refresh_database():
         theme, theme_created = Theme.objects.get_or_create(name=scraped_data['theme'])
         if theme_created:
             logger.info(f'{theme} has been added to database.')
-
         scraped_data['theme'] = theme
 
         age, age_created = AgeCategory.objects.get_or_create(name=scraped_data['age'])
         if age_created:
             logger.info(f'{age} has been added to database.')
-
         scraped_data['age'] = age
 
         scraped_data['available'] = availability_string_to_bool(scraped_data['available'])
