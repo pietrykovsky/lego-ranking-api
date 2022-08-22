@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from ..tasks import refresh_database
 
-from ..models import LegoSet
+from ..models import LegoSet, Theme, AgeCategory
 from ..scraper import LegoScraper
 
 def availability_string_to_bool(available):
@@ -20,14 +20,22 @@ class TasksTests(TestCase):
         url = 'https://www.lego.com/pl-pl/themes'
         scraper = LegoScraper(url)
         scraped_sets = scraper.scrape()
+
         refresh_database()
+
+        themes = Theme.objects.all()
+        age_categories = AgeCategory.objects.all()
         legosets = LegoSet.objects.all()
+        
+        self.assertIsNotNone(themes)
+        self.assertIsNotNone(age_categories)
+        self.assertIsNotNone(legosets)
+
         for set in scraped_sets:
             legoset = legosets.get(product_id=set['product_id'])
-            self.assertIsNotNone(legoset)
-            set['available'] = availability_string_to_bool(set['available'])
-            for k in set:
-                if k == 'theme' and k == 'age':
-                    self.assertEqual(legoset[k].name, set[k])
-                else:    
-                    self.assertEqual(legoset[k], set[k])
+
+            if legoset != None:
+                set['available'] = availability_string_to_bool(set['available'])
+            
+                for k, v in set.items():
+                    self.assertEqual(getattr(legoset, k), v)

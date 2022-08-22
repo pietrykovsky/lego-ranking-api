@@ -2,8 +2,6 @@ from django.test import TestCase
 
 from ..scraper import LegoScraper
 
-from selenium import webdriver
-
 from decimal import Decimal
 
 class ScraperTests(TestCase):
