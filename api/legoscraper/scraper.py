@@ -50,7 +50,7 @@ class LegoScraper():
         list = []
         pages_count = self.get_pages_count(theme_url)
 
-        for page in range(1, pages_count+1):
+        for page in range(pages_count+1):
             html = self.get_html(theme_url + f'?page={page}')
             soup = BeautifulSoup(html, 'html.parser')
 
