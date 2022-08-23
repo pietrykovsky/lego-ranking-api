@@ -22,13 +22,13 @@ class ScraperTests(TestCase):
         """Test function returns list of themes urls correct."""
         urls = self.scraper.scrape_themes_urls()
 
-        self.assertIn('https://www.lego.com/pl-pl/themes/classic', urls)
+        self.assertIn('https://www.lego.com/pl-pl/themes/speed-champions', urls)
 
     def test_scrape_sets_urls_from_theme_success(self):
         """Test function returns list of sets urls correct."""
-        urls = self.scraper.scrape_sets_urls_from_theme('https://www.lego.com/pl-pl/themes/classic')
+        urls = self.scraper.scrape_sets_urls_from_theme('https://www.lego.com/pl-pl/themes/technic')
 
-        self.assertIn('https://www.lego.com/pl-pl/product/brick-separator-630', urls)
+        self.assertIn('https://www.lego.com/pl-pl/product/ferrari-daytona-sp3-42143', urls)
 
     def test_scrape_set_success(self):
         """Test scrape set function returns correct values."""

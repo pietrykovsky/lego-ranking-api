@@ -36,6 +36,8 @@ class TasksTests(TestCase):
 
             if legoset != None:
                 set['available'] = availability_string_to_bool(set['available'])
-            
                 for k, v in set.items():
-                    self.assertEqual(getattr(legoset, k), v)
+                    if k == 'theme' or k == 'age':
+                        self.assertEqual(getattr(legoset, k).name, v)
+                    else:
+                        self.assertEqual(getattr(legoset, k), v)

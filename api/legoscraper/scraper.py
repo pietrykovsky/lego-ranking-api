@@ -54,7 +54,8 @@ class LegoScraper():
             html = self.get_html(theme_url + f'?page={page}')
             soup = BeautifulSoup(html, 'html.parser')
 
-            list = ['https://www.lego.com' + link.get('href') for link in soup.find_all('a', attrs={'data-test': "product-leaf-title-link"})]
+            for link in soup.find_all('a', attrs={'data-test': "product-leaf-title-link"}):
+                list.append('https://www.lego.com' + link.get('href'))
 
         return list
 
@@ -102,6 +103,7 @@ class LegoScraper():
         
         try:
             minifigures = soup.find(attrs={'data-test': 'minifigures-value'}).find(class_='Markup__StyledMarkup-ar1l9g-0 gkoBeO').string
+            minifigures = int(minifigures)
         except:
             minifigures = None
             
