@@ -15,6 +15,9 @@ class LegoSet(models.Model):
     link = models.TextField()
     minifigures = models.IntegerField(blank=True, null=True)
 
+    class Meta:
+        ordering = ['title']
+
     def __str__(self):
         return self.title
 
@@ -29,12 +32,18 @@ class Theme(models.Model):
     """Theme for filtering legosets."""
     name = models.CharField(max_length=100)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
 class AgeCategory(models.Model):
     """Age category for filtering legosets."""
     name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name
