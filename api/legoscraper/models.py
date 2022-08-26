@@ -6,7 +6,7 @@ class LegoSet(models.Model):
     """Model for lego set objects."""
 
     title = models.CharField(max_length=255)
-    product_id = models.CharField(max_length=50, unique=True)
+    product_id = models.CharField(max_length=50, unique=True, primary_key=True)
     theme = models.ForeignKey('Theme', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     available = models.BooleanField(default=False)
@@ -30,7 +30,7 @@ class LegoSet(models.Model):
 
 class Theme(models.Model):
     """Theme for filtering legosets."""
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         ordering = ['name']
@@ -40,7 +40,7 @@ class Theme(models.Model):
 
 class AgeCategory(models.Model):
     """Age category for filtering legosets."""
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         ordering = ['name']

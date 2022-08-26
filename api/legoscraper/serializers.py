@@ -20,15 +20,15 @@ class AgeCategorySerializer(serializers.ModelSerializer):
 
 class LegoSetSerializer(serializers.ModelSerializer):
     """Serializer for lego set."""
-    theme = ThemeSerializer
-    age = AgeCategorySerializer
+    theme = ThemeSerializer()
+    age = AgeCategorySerializer()
     price_per_element = serializers.SerializerMethodField()
 
     class Meta:
         model = LegoSet
-        fields = ['id', 'title', 'product_id', 'price', 'elements', 'price_per_element','theme', 'age', 'available', 'minifigures', 'link']
+        fields = ['title', 'product_id', 'price', 'elements', 'price_per_element','theme', 'age', 'available', 'minifigures', 'link']
         read_only_fields = fields
 
     def get_price_per_element(self, obj):
         """Get the price per element ratio from the object."""
-        return obj.price_per_element
+        return str(obj.price_per_element)
