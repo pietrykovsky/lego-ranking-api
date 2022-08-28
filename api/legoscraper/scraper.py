@@ -107,6 +107,13 @@ class LegoScraper():
         except:
             minifigures = None
             
+        try:
+            img_src = soup.find(attrs={'property': 'og:image'})['content']
+            tmp = img_src.split('?')
+            img_src = tmp[0]
+        except:
+            img_src = None
+
         lego_set = {
             'title': title,
             'product_id': product_id,
@@ -117,6 +124,7 @@ class LegoScraper():
             'elements': elements,
             'link': url,
             'minifigures': minifigures,
+            'img_src': img_src,
         }
 
         return lego_set

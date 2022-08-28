@@ -12,6 +12,7 @@ class LegoSet(models.Model):
     elements = models.IntegerField()
     link = models.TextField()
     minifigures = models.IntegerField(blank=True, null=True)
+    img_src = models.TextField(null=True)
 
     class Meta:
         ordering = ['title']

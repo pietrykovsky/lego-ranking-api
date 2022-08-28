@@ -44,6 +44,7 @@ class ScraperTests(TestCase):
             'elements': 221,
             'link': url,
             'minifigures': None,
+            'img_src': 'https://www.lego.com/cdn/cs/set/assets/bltdcfc11be71d04698/10692.jpg'
         }
         for k, v in lego_set.items():
             self.assertEqual(fields[k], v)
