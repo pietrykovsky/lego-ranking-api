@@ -1,7 +1,5 @@
 from django.db import models
 
-from decimal import Decimal
-
 class LegoSet(models.Model):
     """Model for lego set objects."""
 
@@ -20,13 +18,6 @@ class LegoSet(models.Model):
 
     def __str__(self):
         return self.title
-
-    @property
-    def price_per_element(self):
-        """Return price per element ratio."""
-        elements = Decimal(self.elements)
-        price = Decimal(self.price)
-        return Decimal(price/elements).quantize(Decimal('.01'))
 
 class Theme(models.Model):
     """Theme for filtering legosets."""
