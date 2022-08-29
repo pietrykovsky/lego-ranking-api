@@ -30,12 +30,14 @@ class LegoScraper():
         html = self.get_html(url)
         soup = BeautifulSoup(html, 'html.parser')
 
-        pages = soup.find_all(
-            'a',
-            class_='Paginationstyles__PageLink-npbsev-7'
-        )
+        pages = soup.find_all('a', class_='Paginationstyles__PageLink-npbsev-7')
+        
+        if len(pages) == 0:
+            pages_count = 1
+        else:
+            pages_count = len(pages)
 
-        return len(pages)
+        return pages_count
 
     def scrape_themes_urls(self):
         """Return list of lego themes urls."""

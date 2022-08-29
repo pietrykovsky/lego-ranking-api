@@ -14,21 +14,24 @@ class ScraperTests(TestCase):
     def test_get_pages_count_correct(self):
         """Test get_pages_count returns correct number of pages."""
         url = 'https://www.lego.com/pl-pl/themes/classic'
-        pages_count = self.scraper.get_pages_count(url)
-
-        self.assertEqual(pages_count, 2)
+        classic_pages_count = self.scraper.get_pages_count(url)
+        url = 'https://www.lego.com/pl-pl/themes/speed-champions'
+        speed_pages_count = self.scraper.get_pages_count(url)
+        
+        self.assertEqual(classic_pages_count, 2)
+        self.assertEqual(speed_pages_count, 1)
 
     def test_scrape_themes_urls_success(self):
         """Test function returns list of themes urls correct."""
         urls = self.scraper.scrape_themes_urls()
-
+        
         self.assertIn('https://www.lego.com/pl-pl/themes/architecture', urls)
 
     def test_scrape_sets_urls_from_theme_success(self):
         """Test function returns list of sets urls correct."""
-        urls = self.scraper.scrape_sets_urls_from_theme('https://www.lego.com/pl-pl/themes/architecture')
-
-        self.assertIn('https://www.lego.com/pl-pl/product/great-pyramid-of-giza-21058', urls)
+        urls = self.scraper.scrape_sets_urls_from_theme('https://www.lego.com/pl-pl/themes/speed-champions')
+        
+        self.assertIn('https://www.lego.com/pl-pl/product/007-aston-martin-db5-76911', urls)
 
     def test_scrape_set_success(self):
         """Test scrape set function returns correct values."""
@@ -57,3 +60,10 @@ class ScraperTests(TestCase):
             for k in lego_set:
                 self.assertIsNotNone(lego_set[k])
         self.assertIsNotNone(lego_sets)
+
+    def test_scrape_sets_image_success(self):
+        """Test scrape set with image source success."""
+        url = 'https://www.lego.com/pl-pl/product/007-aston-martin-db5-76911'
+        fields = self.scraper.scrape_set(url)
+        print(fields)
+        self.assertIsNotNone(fields['img_src'])

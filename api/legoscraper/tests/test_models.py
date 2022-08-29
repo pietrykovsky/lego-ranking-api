@@ -34,27 +34,11 @@ class ModelTests(TestCase):
             'age': age_category,
             'elements': 2354,
             'link': 'https://www.lego.com/pl-pl/product/nasa-space-shuttle-discovery-10283',
+            'img_src': 'https://www.lego.com/cdn/cs/set/assets/blt00ba54004c17e820/10283.jpg'
         }
         legoset = LegoSet.objects.create(**fields)
 
         for k, v in fields.items():
             self.assertEqual(getattr(legoset, k), v)
         self.assertEqual(legoset.minifigures, None)
-
-    def test_legoset_price_per_element_correct(self):
-        """Test price per element property returns a correct value."""
-        theme = Theme.objects.create(name='Classic')
-        age_category = AgeCategory.objects.create(name='18+')
-        fields = {
-            'title': 'test title',
-            'product_id': '10283',
-            'theme': theme,
-            'price': Decimal('333.33'),
-            'available': True,
-            'age': age_category,
-            'elements': 2,
-            'link': 'https://www.lego.com/pl-pl/product/nasa-space-shuttle-discovery-10283',
-        }
-        legoset = LegoSet.objects.create(**fields)
-
-        self.assertEqual(legoset.price_per_element, Decimal('166.66'))
+        self.assertIsNotNone(legoset.updated)

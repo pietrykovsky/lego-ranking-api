@@ -13,6 +13,7 @@ class LegoSet(models.Model):
     link = models.TextField()
     minifigures = models.IntegerField(blank=True, null=True)
     img_src = models.TextField(null=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['title']
