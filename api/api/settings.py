@@ -33,7 +33,7 @@ ALLOWED_HOSTS.extend(filter(None, os.environ.get('DJANGO_ALLOWED_HOSTS', '').spl
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'core.apps_admin.LegoAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

@@ -17,6 +17,7 @@ class LegoSet(models.Model):
 
     class Meta:
         ordering = ['title']
+        verbose_name = 'Lego set'
 
     def __str__(self):
         return self.title
@@ -27,6 +28,8 @@ class Theme(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Theme category'
+        verbose_name_plural = 'Theme categories'
 
     def __str__(self):
         return self.name
@@ -37,6 +40,8 @@ class AgeCategory(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Age category'
+        verbose_name_plural = 'Age categories'
 
     def __str__(self):
         return self.name
