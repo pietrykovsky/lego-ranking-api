@@ -140,6 +140,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BROKER_URL = os.environ.get('REDIS_CLOUD_URL')
 CELERY_RESULT_BACKEND = os.environ.get('REDIS_CLOUD_URL')
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TIMEZONE = TIME_ZONE
 
 # Django rest framework settings
 REST_FRAMEWORK = {
