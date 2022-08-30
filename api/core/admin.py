@@ -25,7 +25,7 @@ class LegoSetAdmin(admin.ModelAdmin):
     readonly_fields = ('updated', 'price_per_element', 'available')
     list_display = ('title', 'theme', 'price', 'elements', 'price_per_element', 'available', 'updated')
     list_filter = ('theme__name', 'age__name', 'available')
-    search_field = ('title', 'theme__name')
+    search_fields = ('title', 'theme__name')
 
     @admin.display(ordering='price_per_element', empty_value='???')
     def price_per_element(self, obj):
