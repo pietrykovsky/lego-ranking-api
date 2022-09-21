@@ -47,26 +47,6 @@ class PeriodicTaskAdmin(admin.ModelAdmin):
     list_filter = ['enabled', 'one_off', 'task', 'start_time', 'last_run_at']
     actions = ('enable_tasks', 'disable_tasks', 'toggle_tasks', 'run_tasks')
     search_fields = ('name',)
-    fieldsets = (
-        (None, {
-            'fields': ('name', 'regtask', 'task', 'enabled', 'description',),
-            'classes': ('extrapretty', 'wide'),
-        }),
-        ('Schedule', {
-            'fields': ('interval', 'crontab', 'solar', 'clocked',
-                       'start_time', 'last_run_at', 'one_off'),
-            'classes': ('extrapretty', 'wide'),
-        }),
-        ('Arguments', {
-            'fields': ('args', 'kwargs'),
-            'classes': ('extrapretty', 'wide', 'collapse', 'in'),
-        }),
-        ('Execution Options', {
-            'fields': ('expires', 'expire_seconds', 'queue', 'exchange',
-                       'routing_key', 'priority', 'headers'),
-            'classes': ('extrapretty', 'wide', 'collapse', 'in'),
-        }),
-    )
     readonly_fields = (
         'last_run_at',
     )
