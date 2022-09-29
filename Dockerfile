@@ -1,30 +1,18 @@
-FROM python:3
+FROM python:3.10-slim-buster
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# install google chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' && \
-    apt-get -y update && \
-    apt-get install -y google-chrome-stable
-
-# install chromedriver
-RUN apt-get install -yqq unzip && \
-    wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip && \
-    unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
-
-# set display port to avoid crash
-ENV DISPLAY=:99
+RUN apt-get update                             \
+ && apt-get install -y --no-install-recommends \
+    ca-certificates curl firefox-esr           \
+ && rm -fr /var/lib/apt/lists/*                \
+ && curl -L https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux64.tar.gz | tar xz -C /usr/local/bin \
+ && apt-get purge -y ca-certificates curl
 
 COPY requirements.txt /api/requirements.txt
 COPY ./api /api
 WORKDIR /api
 
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
-    adduser --disabled-password --no-create-home django-user && \
-    chown -R django-user:django-user /api && \
-    chmod -R 755 /api
-
-USER django-user
+    pip install -r requirements.txt
